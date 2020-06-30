@@ -154,7 +154,7 @@ const NewPost = ({ history }) => {
           </Pop>
         }
         center={
-          <h3 className="text-lg font-bold text-white px-2">New Post</h3>
+        <h3 className="text-lg font-bold text-white px-2">New Demand</h3>
         }
         right={
           isSubmitting ? (
@@ -174,6 +174,7 @@ const NewPost = ({ history }) => {
         }
       />
       <div>
+        <h4 className="text-xl text-white p-4 text-center">Posting to <b>{params.mementoId}</b></h4>
         <div className="w-full relative pb-full mt-2 rounded-md overflow-hidden">
           {
             !loadingImg && (
@@ -208,8 +209,8 @@ const NewPost = ({ history }) => {
             }
           </div>
         </div>
-        <div className="mt-2">
-          <textarea placeholder="Your demand" className="w-full rounded-md p-2 outline-none bg-dark-2 focus:bg-dark-16 text-white" value={caption} onChange={updateCaption} />
+        <div className="mt-4">
+          <textarea placeholder="I demand..." className="w-full resize-none h-32 rounded-md p-2 outline-none bg-dark-2 focus:bg-dark-16 text-white" value={caption} onChange={updateCaption} />
         </div>
       </div>
     </div >
