@@ -49,6 +49,12 @@ module.exports = {
       boxShadow: {
         'inner-sm': 'inset 0px 1px 8px rgba(0, 0, 0, 0.25)',
         'subtle': `0px 0px 4px rgba(0, 0, 0, 0.15)`
+      },
+      padding: {
+        'third': '33.3%',
+        'half': '50%',
+        'full': '100%',
+        '3/4': '75%',
       }
     }
   }

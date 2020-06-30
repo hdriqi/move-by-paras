@@ -3,3 +3,57 @@
 @tailwind components;
 
 @tailwind utilities;
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inconsolata', monospace;
+  font-weight: 400;
+  @apply bg-dark-0;
+}
+
+h1, h2, h3, h4, button {
+  @apply tracking-normal;
+}
+
+p {
+  @apply leading-normal;
+  letter-spacing: -.02em;
+}
+
+button:focus {
+  @apply outline-none;
+}
+
+button:disabled {
+  @apply opacity-25 cursor-not-allowed;
+}
+
+input, textarea {
+  font-family: 'Inconsolata', monospace;
+}
+
+textarea {
+  @apply outline-none;
+}
+
+a {
+  cursor: pointer;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

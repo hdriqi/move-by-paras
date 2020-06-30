@@ -1,21 +1,73 @@
 import 'regenerator-runtime/runtime'
-import React, { Component, createRef, createContext, useContext, useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as faceapi from 'face-api.js'
 import { createCanvas, loadImage } from 'canvas'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import NavTop from '../components/NavTop'
+import Pop from '../components/Pop'
+import { RotateSpinLoader } from 'react-css-loaders'
+import { compressImg } from '../utils/common'
+import { useNear } from '../App'
+import ipfs from '../utils/ipfs'
 
 const NewPost = () => {
-  const canvasRef = useRef(null)
-  const [image, setImage] = useState({})
+  const params = useParams()
+  const near = useNear()
+  const [imageUrl, setImageUrl] = useState(null)
+  const [imageFile, setImageFile] = useState(null)
+  const [caption, setCaption] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loadingImg, setLoadingImg] = useState(false)
+
+  const _validateSubmit = () => {
+    if (imageFile && caption.length < 400) {
+      return true
+    }
+    return false
+  }
+
+  const _submit = async () => {
+    setIsSubmitting(true)
+    try {
+      const contentList = []
+      const img = await compressImg(imageFile)
+      for await (const file of ipfs.client.add([{
+        content: img
+      }])) {
+        const content = {
+          type: 'img',
+          body: JSON.stringify({
+            url: file.path,
+            type: 'ipfs'
+          })
+        }
+        contentList.push(content)
+      }
+      contentList.push({
+        type: 'text',
+        body: caption
+      })
+      const newData = {
+        contentList: contentList,
+        mementoId: params.mementoId,
+      }
+      await near.contract.createPost(newData)
+    } catch (err) {
+      console.log(err)
+    }
+    setIsSubmitting(false)
+  }
 
   const updateImg = (e) => {
     var reader = new FileReader()
+    setLoadingImg('Detecting Faces...')
     reader.onload = () => {
       const dataURL = reader.result
       const imgEl = new Image()
       imgEl.src = dataURL
       imgEl.onload = async () => {
-        setImage(imgEl)
-        const detections = await faceapi.detectAllFaces(imgEl, new faceapi.SsdMobilenetv1Options())
+        const detections = await faceapi.detectAllFaces(imgEl)
         const faces = detections.map(x => ({
           x: x.box.topLeft.x,
           y: x.box.topLeft.y,
@@ -23,13 +75,14 @@ const NewPost = () => {
           h: x.box.height
         }))
 
-        const outputCanvas = canvasRef.current
+        const outputCanvas = createCanvas(imgEl.width, imgEl.height)
         const outputCtx = outputCanvas.getContext('2d')
 
         const hiddenCanvas = createCanvas(imgEl.width, imgEl.height)
         const hiddenCtx = hiddenCanvas.getContext('2d')
 
-        loadImage(dataURL).then((newImage) => {
+        setLoadingImg('Pixelating Faces...')
+        loadImage(dataURL).then(async (newImage) => {
           hiddenCanvas.style.cssText = 'image-rendering: optimizeSpeed' +
             'image-rendering: -moz-crisp-edges' + // FireFox
             'image-rendering: -o-crisp-edges' +  // Opera
@@ -69,235 +122,95 @@ const NewPost = () => {
               face.y
             )
           )
+          const dataUrl = await outputCanvas.toDataURL()
+          setImageUrl(dataUrl)
+          outputCanvas.toBlob((blob) => {
+            setImageFile(blob)
+          })
+          setLoadingImg(false)
         })
       }
     }
     reader.readAsDataURL(e.target.files[0])
   }
 
+  const updateCaption = (e) => {
+    setCaption(e.target.value)
+  }
   return (
     <div>
-      New Post
+      <NavTop
+        left={
+          <Pop>
+            <button className="flex items-center">
+              <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" clipRule="evenodd" d="M16 30C23.732 30 30 23.732 30 16C30 8.26801 23.732 2 16 2C8.26801 2 2 8.26801 2 16C2 23.732 8.26801 30 16 30ZM16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z" fill="#F2F2F2" />
+                <path fillRule="evenodd" clipRule="evenodd" d="M14.394 9.93934C14.9798 10.5251 14.9798 11.4749 14.394 12.0607L11.6213 14.8333H24C24.8284 14.8333 25.5 15.5049 25.5 16.3333C25.5 17.1618 24.8284 17.8333 24 17.8333H11.6213L14.394 20.606C14.9798 21.1918 14.9798 22.1415 14.394 22.7273C13.8082 23.3131 12.8585 23.3131 12.2727 22.7273L6.93934 17.394C6.65804 17.1127 6.5 16.7312 6.5 16.3333C6.5 15.9355 6.65804 15.554 6.93934 15.2727L12.2727 9.93934C12.8585 9.35355 13.8082 9.35355 14.394 9.93934Z" fill="#F2F2F2" />
+              </svg>
+            </button>
+          </Pop>
+        }
+        center={
+          <h3 className="text-lg font-bold text-white px-2">New Post</h3>
+        }
+        right={
+          isSubmitting ? (
+            <RotateSpinLoader style={{
+              marginLeft: `auto`,
+              marginRight: 0
+            }} color="#e13128" size={2.4} />
+          ) : (
+              <button disabled={!_validateSubmit()} onClick={_submit}>
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M16 30C23.732 30 30 23.732 30 16C30 8.26801 23.732 2 16 2C8.26801 2 2 8.26801 2 16C2 23.732 8.26801 30 16 30ZM16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z" fill="#E13128" />
+                  <circle cx="16" cy="16" r="16" fill="#E13128" />
+                  <path fillRule="evenodd" clipRule="evenodd" d="M13.7061 19.2929L22.999 10L24.4132 11.4142L13.7061 22.1213L7.99902 16.4142L9.41324 15L13.7061 19.2929Z" fill="white" />
+                </svg>
+              </button>
+            )
+        }
+      />
       <div>
-        <input type="file" onChange={updateImg} />
-        <canvas
-          ref={canvasRef}
-          width={image.width}
-          height={image.height}
-          style={{ maxWidth: "100%", maxHeight: "auto" }}
-        />
+        <div className="w-full relative pb-full mt-2 rounded-md overflow-hidden">
+          {
+            !loadingImg && (
+              <input className="absolute m-auto w-full h-full z-10 opacity-0" type="file" onChange={updateImg} />
+            )
+          }
+          <div className="absolute m-auto w-full h-full bg-dark-2 focus:bg-dark-16">
+            {
+              loadingImg ? (
+                <div className="flex items-center h-full overflow-hidden">
+                  <div className="w-full">
+                    <RotateSpinLoader style={{
+                      margin: 'auto'
+                    }} color="#e13128" size={4} />
+                    <p className="text-white-1 text-center mt-4">{loadingImg}</p>
+                  </div>
+                </div>
+              ) : imageUrl ? (
+                <div className="flex items-center h-full">
+                  <img className="object-contain" src={imageUrl} />
+                </div>
+              ) : (
+                    <div className="flex items-center h-full overflow-hidden">
+                      <div className="w-full text-center">
+                        <svg className="m-auto" width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fillRule="evenodd" clipRule="evenodd" d="M4 2H20C21.1046 2 22 2.89543 22 4V20C22 21.1046 21.1046 22 20 22H4C2.89543 22 2 21.1046 2 20V4C2 2.89543 2.89543 2 4 2ZM4 4V15.5858L8 11.5858L11.5 15.0858L18 8.58579L20 10.5858V4H4ZM4 20V18.4142L8 14.4142L13.5858 20H4ZM20 20H16.4142L12.9142 16.5L18 11.4142L20 13.4142V20ZM14 8C14 6.34315 12.6569 5 11 5C9.34315 5 8 6.34315 8 8C8 9.65685 9.34315 11 11 11C12.6569 11 14 9.65685 14 8ZM10 8C10 7.44772 10.4477 7 11 7C11.5523 7 12 7.44772 12 8C12 8.55228 11.5523 9 11 9C10.4477 9 10 8.55228 10 8Z" fill="white" />
+                        </svg>
+                        <p className="text-white-1 mt-4">Choose Image</p>
+                      </div>
+                    </div>
+                  )
+            }
+          </div>
+        </div>
+        <div className="mt-2">
+          <textarea placeholder="Write a caption..." className="w-full rounded-md p-2 outline-none bg-dark-2 focus:bg-dark-16 text-white" value={caption} onChange={updateCaption} />
+        </div>
       </div>
-    </div>
+    </div >
   )
 }
-
-// class App extends Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       login: false,
-//       speech: null,
-//       image: {}
-//     }
-//     this.canvasRef = createRef(null)
-//     this.signedInFlow = this.signedInFlow.bind(this)
-//     this.requestSignIn = this.requestSignIn.bind(this)
-//     this.requestSignOut = this.requestSignOut.bind(this)
-//     this.signedOutFlow = this.signedOutFlow.bind(this)
-//     this.changeGreeting = this.changeGreeting.bind(this)
-//     this.updateImg = this.updateImg.bind(this)
-//   }
-
-//   componentDidMount() {
-//     let loggedIn = this.props.wallet.isSignedIn()
-//     if (loggedIn) {
-//       this.signedInFlow()
-//     } else {
-//       this.signedOutFlow()
-//     }
-//   }
-
-//   async signedInFlow() {
-//     console.log("come in sign in flow")
-//     this.setState({
-//       login: true,
-//     })
-//     const accountId = await this.props.wallet.getAccountId()
-//     if (window.location.search.includes("account_id")) {
-//       window.location.replace(window.location.origin + window.location.pathname)
-//     }
-//     await this.welcome()
-//   }
-
-//   async welcome() {
-//     const response = await this.props.contract.welcome({ account_id: accountId })
-//     this.setState({ speech: response.text })
-
-//     await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
-//     await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
-//     console.log('loaded')
-//   }
-
-//   async requestSignIn() {
-//     const appTitle = 'NEAR React template'
-//     await this.props.wallet.requestSignIn(
-//       window.nearConfig.contractName,
-//       appTitle
-//     )
-//   }
-
-//   requestSignOut() {
-//     this.props.wallet.signOut()
-//     setTimeout(this.signedOutFlow, 500)
-//     console.log("after sign out", this.props.wallet.isSignedIn())
-//   }
-
-//   async changeGreeting() {
-//     await this.props.contract.setGreeting({ message: 'howdy' })
-//     await this.welcome()
-//   }
-
-//   signedOutFlow() {
-//     if (window.location.search.includes("account_id")) {
-//       window.location.replace(window.location.origin + window.location.pathname)
-//     }
-//     this.setState({
-//       login: false,
-//       speech: null
-//     })
-//   }
-
-//   updateImg(e) {
-//     const self = this
-//     var reader = new FileReader()
-//     reader.onload = async function () {
-//       var dataURL = reader.result
-//       var output = document.getElementById('output')
-//       output.src = dataURL
-//       const x = await faceapi.detectAllFaces(output, new faceapi.SsdMobilenetv1Options())
-//       const y = await faceapi.detectAllFaces(output, new faceapi.TinyFaceDetectorOptions())
-//       const faces = x.map(x => ({
-//         x: x.box.topLeft.x,
-//         y: x.box.topLeft.y,
-//         w: x.box.width,
-//         h: x.box.height
-//       }))
-
-//       const threshold = 4
-
-//       // Output Canvas and Context
-//       const outputCanvas = self.canvasRef.current
-//       const outputCtx = outputCanvas.getContext('2d')
-
-//       self.setState({
-//         image: output
-//       })
-
-//       // Hidden Canvas and Context
-//       const hiddenCanvas = createCanvas(output.width, output.height)
-//       const hiddenCtx = hiddenCanvas.getContext('2d')
-
-//       // Load Image
-//       loadImage(dataURL).then((newImage) => {
-//         // New canvases for applying blurring and feathering (canvases for inverted mask of blurred images)
-//         const imaskCanvas = createCanvas(output.width, output.height)
-//         const imaskCtx = imaskCanvas.getContext('2d')
-//         const imaskCanvas2 = createCanvas(output.width, output.height)
-//         const imaskCtx2 = imaskCanvas2.getContext('2d')
-
-//         // Set global composite operation to destination in
-//         imaskCtx.globalCompositeOperation = "destination-in"
-
-//         // Draw blurred faces to inverted mask canvas (x,y,w,h are modified due to blurring and feathering)
-//         faces.forEach((face, i) => {
-//           // Determine the blur amount by width of face
-//           let blurAmount = threshold
-//           if (face.w >= 300) blurAmount = threshold * 2.5
-//           else if (face.w <= 30) blurAmount = threshold * 0.25
-
-//           hiddenCtx.filter = `blur(${blurAmount}px)` // Add blur filter
-//           hiddenCtx.drawImage(newImage, 0, 0, output.width, output.height) // Draw original image to hidden canvas
-//           imaskCtx.putImageData(hiddenCtx.getImageData(face.x - 10, face.y - 10, face.w + 20, face.h + 20), face.x - 10, face.y - 10) // Add blurred faces to blank canvas 
-//         })
-
-//         // Draw blurred faces onto 2nd inverted mask canvas 
-//         imaskCtx2.drawImage(imaskCanvas, 0, 0)
-//         imaskCtx2.shadowColor = "black" // Required for feathering
-//         imaskCtx2.shadowBlur = 30
-//         imaskCtx2.globalCompositeOperation = "destination-in"
-
-//         // Feathering
-//         imaskCtx2.shadowBlur = 20
-//         imaskCtx2.drawImage(imaskCanvas, 0, 0)
-//         imaskCtx2.shadowBlur = 10
-//         imaskCtx2.drawImage(imaskCanvas, 0, 0)
-
-//         // Clear visible canvas then draw original image to it and then add the blurred images
-//         outputCtx.clearRect(0, 0, output.width, output.height)
-//         outputCtx.drawImage(newImage, 0, 0)
-//         outputCtx.drawImage(imaskCanvas2, 0, 0)
-//       })
-//     }
-//     reader.readAsDataURL(e.target.files[0])
-//   }
-
-//   render() {
-//     let style = {
-//       fontSize: "1.5rem",
-//       color: "#0072CE",
-//       textShadow: "1px 1px #D1CCBD"
-//     }
-//     return (
-//       <div className="bg-dark-0 max-w-2xl m-auto">
-//         <div className="image-wrapper">
-//           <img className="logo" src={nearlogo} alt="NEAR logo" />
-//           <p><span role="img" aria-label="fish">🐟</span> NEAR protocol is a new blockchain focused on developer productivity and useability!<span role="img" aria-label="fish">🐟</span></p>
-//           <p><span role="img" aria-label="chain">⛓</span> This little react app is connected to blockchain right now. <span role="img" aria-label="chain">⛓</span></p>
-//           <p style={style}>{this.state.speech}</p>
-//         </div>
-//         <div>
-//           {this.state.login ?
-//             <div>
-//               <button onClick={this.requestSignOut}>Log out</button>
-//               <button onClick={this.changeGreeting}>Change greeting</button>
-//             </div>
-//             : <button onClick={this.requestSignIn}>Log in with NEAR</button>}
-//         </div>
-//         <div>
-//           <div className="logo-wrapper">
-//             <img src={near} className="App-logo margin-logo" alt="logo" />
-//             <img src={logo} className="App-logo" alt="logo" />
-//           </div>
-//           <input type="file" onChange={this.updateImg} />
-//           <canvas
-//             ref={this.canvasRef}
-//             width={this.state.image.width}
-//             height={this.state.image.height}
-//             style={{ maxWidth: "100%", maxHeight: "auto" }}
-//           />
-//           <p>
-//             Edit <code>src/App.js</code> and save to reload.
-//           </p>
-//           <a
-//             className="App-link"
-//             href="https://reactjs.org"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             Learn React
-//           </a>
-//           <div>
-//             <img id="output" />
-//           </div>
-//           <p><span role="img" aria-label="net">🕸</span> <a className="App-link" href="https://nearprotocol.com">NEAR Website</a> <span role="img" aria-label="net">🕸</span>
-//           </p>
-//           <p><span role="img" aria-label="book">📚</span><a className="App-link" href="https://docs.nearprotocol.com"> Learn from NEAR Documentation</a> <span role="img" aria-label="book">📚</span>
-//           </p>
-//         </div>
-//       </div>
-//     )
-//   }
-
-// }
 
 export default NewPost

@@ -9092,6 +9092,22 @@ video {
   padding: 1px;
 }
 
+.p-third {
+  padding: 33.3%;
+}
+
+.p-half {
+  padding: 50%;
+}
+
+.p-full {
+  padding: 100%;
+}
+
+.p-3\/4 {
+  padding: 75%;
+}
+
 .py-0 {
   padding-top: 0;
   padding-bottom: 0;
@@ -9280,6 +9296,46 @@ video {
 .px-px {
   padding-left: 1px;
   padding-right: 1px;
+}
+
+.py-third {
+  padding-top: 33.3%;
+  padding-bottom: 33.3%;
+}
+
+.px-third {
+  padding-left: 33.3%;
+  padding-right: 33.3%;
+}
+
+.py-half {
+  padding-top: 50%;
+  padding-bottom: 50%;
+}
+
+.px-half {
+  padding-left: 50%;
+  padding-right: 50%;
+}
+
+.py-full {
+  padding-top: 100%;
+  padding-bottom: 100%;
+}
+
+.px-full {
+  padding-left: 100%;
+  padding-right: 100%;
+}
+
+.py-3\/4 {
+  padding-top: 75%;
+  padding-bottom: 75%;
+}
+
+.px-3\/4 {
+  padding-left: 75%;
+  padding-right: 75%;
 }
 
 .pt-0 {
@@ -9584,6 +9640,70 @@ video {
 
 .pl-px {
   padding-left: 1px;
+}
+
+.pt-third {
+  padding-top: 33.3%;
+}
+
+.pr-third {
+  padding-right: 33.3%;
+}
+
+.pb-third {
+  padding-bottom: 33.3%;
+}
+
+.pl-third {
+  padding-left: 33.3%;
+}
+
+.pt-half {
+  padding-top: 50%;
+}
+
+.pr-half {
+  padding-right: 50%;
+}
+
+.pb-half {
+  padding-bottom: 50%;
+}
+
+.pl-half {
+  padding-left: 50%;
+}
+
+.pt-full {
+  padding-top: 100%;
+}
+
+.pr-full {
+  padding-right: 100%;
+}
+
+.pb-full {
+  padding-bottom: 100%;
+}
+
+.pl-full {
+  padding-left: 100%;
+}
+
+.pt-3\/4 {
+  padding-top: 75%;
+}
+
+.pr-3\/4 {
+  padding-right: 75%;
+}
+
+.pb-3\/4 {
+  padding-bottom: 75%;
+}
+
+.pl-3\/4 {
+  padding-left: 75%;
 }
 
 .placeholder-transparent::placeholder {
@@ -16489,6 +16609,64 @@ video {
 
 .delay-1000 {
   transition-delay: 1000ms;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inconsolata', monospace;
+  font-weight: 400;
+  --bg-opacity: 1;
+  background-color: #121212;
+  background-color: rgba(18, 18, 18, var(--bg-opacity));
+}
+
+h1, h2, h3, h4, button {
+  letter-spacing: 0;
+}
+
+p {
+  line-height: 1.5;
+  letter-spacing: -.02em;
+}
+
+button:focus {
+  outline: 0;
+}
+
+button:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+input, textarea {
+  font-family: 'Inconsolata', monospace;
+}
+
+textarea {
+  outline: 0;
+}
+
+a {
+  cursor: pointer;
+}
+
+/* Chrome, Safari, Edge, Opera */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 @media (min-width: 640px) {
@@ -24978,6 +25156,22 @@ video {
     padding: 1px;
   }
 
+  .sm\:p-third {
+    padding: 33.3%;
+  }
+
+  .sm\:p-half {
+    padding: 50%;
+  }
+
+  .sm\:p-full {
+    padding: 100%;
+  }
+
+  .sm\:p-3\/4 {
+    padding: 75%;
+  }
+
   .sm\:py-0 {
     padding-top: 0;
     padding-bottom: 0;
@@ -25166,6 +25360,46 @@ video {
   .sm\:px-px {
     padding-left: 1px;
     padding-right: 1px;
+  }
+
+  .sm\:py-third {
+    padding-top: 33.3%;
+    padding-bottom: 33.3%;
+  }
+
+  .sm\:px-third {
+    padding-left: 33.3%;
+    padding-right: 33.3%;
+  }
+
+  .sm\:py-half {
+    padding-top: 50%;
+    padding-bottom: 50%;
+  }
+
+  .sm\:px-half {
+    padding-left: 50%;
+    padding-right: 50%;
+  }
+
+  .sm\:py-full {
+    padding-top: 100%;
+    padding-bottom: 100%;
+  }
+
+  .sm\:px-full {
+    padding-left: 100%;
+    padding-right: 100%;
+  }
+
+  .sm\:py-3\/4 {
+    padding-top: 75%;
+    padding-bottom: 75%;
+  }
+
+  .sm\:px-3\/4 {
+    padding-left: 75%;
+    padding-right: 75%;
   }
 
   .sm\:pt-0 {
@@ -25470,6 +25704,70 @@ video {
 
   .sm\:pl-px {
     padding-left: 1px;
+  }
+
+  .sm\:pt-third {
+    padding-top: 33.3%;
+  }
+
+  .sm\:pr-third {
+    padding-right: 33.3%;
+  }
+
+  .sm\:pb-third {
+    padding-bottom: 33.3%;
+  }
+
+  .sm\:pl-third {
+    padding-left: 33.3%;
+  }
+
+  .sm\:pt-half {
+    padding-top: 50%;
+  }
+
+  .sm\:pr-half {
+    padding-right: 50%;
+  }
+
+  .sm\:pb-half {
+    padding-bottom: 50%;
+  }
+
+  .sm\:pl-half {
+    padding-left: 50%;
+  }
+
+  .sm\:pt-full {
+    padding-top: 100%;
+  }
+
+  .sm\:pr-full {
+    padding-right: 100%;
+  }
+
+  .sm\:pb-full {
+    padding-bottom: 100%;
+  }
+
+  .sm\:pl-full {
+    padding-left: 100%;
+  }
+
+  .sm\:pt-3\/4 {
+    padding-top: 75%;
+  }
+
+  .sm\:pr-3\/4 {
+    padding-right: 75%;
+  }
+
+  .sm\:pb-3\/4 {
+    padding-bottom: 75%;
+  }
+
+  .sm\:pl-3\/4 {
+    padding-left: 75%;
   }
 
   .sm\:placeholder-transparent::placeholder {
@@ -40865,6 +41163,22 @@ video {
     padding: 1px;
   }
 
+  .md\:p-third {
+    padding: 33.3%;
+  }
+
+  .md\:p-half {
+    padding: 50%;
+  }
+
+  .md\:p-full {
+    padding: 100%;
+  }
+
+  .md\:p-3\/4 {
+    padding: 75%;
+  }
+
   .md\:py-0 {
     padding-top: 0;
     padding-bottom: 0;
@@ -41053,6 +41367,46 @@ video {
   .md\:px-px {
     padding-left: 1px;
     padding-right: 1px;
+  }
+
+  .md\:py-third {
+    padding-top: 33.3%;
+    padding-bottom: 33.3%;
+  }
+
+  .md\:px-third {
+    padding-left: 33.3%;
+    padding-right: 33.3%;
+  }
+
+  .md\:py-half {
+    padding-top: 50%;
+    padding-bottom: 50%;
+  }
+
+  .md\:px-half {
+    padding-left: 50%;
+    padding-right: 50%;
+  }
+
+  .md\:py-full {
+    padding-top: 100%;
+    padding-bottom: 100%;
+  }
+
+  .md\:px-full {
+    padding-left: 100%;
+    padding-right: 100%;
+  }
+
+  .md\:py-3\/4 {
+    padding-top: 75%;
+    padding-bottom: 75%;
+  }
+
+  .md\:px-3\/4 {
+    padding-left: 75%;
+    padding-right: 75%;
   }
 
   .md\:pt-0 {
@@ -41357,6 +41711,70 @@ video {
 
   .md\:pl-px {
     padding-left: 1px;
+  }
+
+  .md\:pt-third {
+    padding-top: 33.3%;
+  }
+
+  .md\:pr-third {
+    padding-right: 33.3%;
+  }
+
+  .md\:pb-third {
+    padding-bottom: 33.3%;
+  }
+
+  .md\:pl-third {
+    padding-left: 33.3%;
+  }
+
+  .md\:pt-half {
+    padding-top: 50%;
+  }
+
+  .md\:pr-half {
+    padding-right: 50%;
+  }
+
+  .md\:pb-half {
+    padding-bottom: 50%;
+  }
+
+  .md\:pl-half {
+    padding-left: 50%;
+  }
+
+  .md\:pt-full {
+    padding-top: 100%;
+  }
+
+  .md\:pr-full {
+    padding-right: 100%;
+  }
+
+  .md\:pb-full {
+    padding-bottom: 100%;
+  }
+
+  .md\:pl-full {
+    padding-left: 100%;
+  }
+
+  .md\:pt-3\/4 {
+    padding-top: 75%;
+  }
+
+  .md\:pr-3\/4 {
+    padding-right: 75%;
+  }
+
+  .md\:pb-3\/4 {
+    padding-bottom: 75%;
+  }
+
+  .md\:pl-3\/4 {
+    padding-left: 75%;
   }
 
   .md\:placeholder-transparent::placeholder {
@@ -56752,6 +57170,22 @@ video {
     padding: 1px;
   }
 
+  .lg\:p-third {
+    padding: 33.3%;
+  }
+
+  .lg\:p-half {
+    padding: 50%;
+  }
+
+  .lg\:p-full {
+    padding: 100%;
+  }
+
+  .lg\:p-3\/4 {
+    padding: 75%;
+  }
+
   .lg\:py-0 {
     padding-top: 0;
     padding-bottom: 0;
@@ -56940,6 +57374,46 @@ video {
   .lg\:px-px {
     padding-left: 1px;
     padding-right: 1px;
+  }
+
+  .lg\:py-third {
+    padding-top: 33.3%;
+    padding-bottom: 33.3%;
+  }
+
+  .lg\:px-third {
+    padding-left: 33.3%;
+    padding-right: 33.3%;
+  }
+
+  .lg\:py-half {
+    padding-top: 50%;
+    padding-bottom: 50%;
+  }
+
+  .lg\:px-half {
+    padding-left: 50%;
+    padding-right: 50%;
+  }
+
+  .lg\:py-full {
+    padding-top: 100%;
+    padding-bottom: 100%;
+  }
+
+  .lg\:px-full {
+    padding-left: 100%;
+    padding-right: 100%;
+  }
+
+  .lg\:py-3\/4 {
+    padding-top: 75%;
+    padding-bottom: 75%;
+  }
+
+  .lg\:px-3\/4 {
+    padding-left: 75%;
+    padding-right: 75%;
   }
 
   .lg\:pt-0 {
@@ -57244,6 +57718,70 @@ video {
 
   .lg\:pl-px {
     padding-left: 1px;
+  }
+
+  .lg\:pt-third {
+    padding-top: 33.3%;
+  }
+
+  .lg\:pr-third {
+    padding-right: 33.3%;
+  }
+
+  .lg\:pb-third {
+    padding-bottom: 33.3%;
+  }
+
+  .lg\:pl-third {
+    padding-left: 33.3%;
+  }
+
+  .lg\:pt-half {
+    padding-top: 50%;
+  }
+
+  .lg\:pr-half {
+    padding-right: 50%;
+  }
+
+  .lg\:pb-half {
+    padding-bottom: 50%;
+  }
+
+  .lg\:pl-half {
+    padding-left: 50%;
+  }
+
+  .lg\:pt-full {
+    padding-top: 100%;
+  }
+
+  .lg\:pr-full {
+    padding-right: 100%;
+  }
+
+  .lg\:pb-full {
+    padding-bottom: 100%;
+  }
+
+  .lg\:pl-full {
+    padding-left: 100%;
+  }
+
+  .lg\:pt-3\/4 {
+    padding-top: 75%;
+  }
+
+  .lg\:pr-3\/4 {
+    padding-right: 75%;
+  }
+
+  .lg\:pb-3\/4 {
+    padding-bottom: 75%;
+  }
+
+  .lg\:pl-3\/4 {
+    padding-left: 75%;
   }
 
   .lg\:placeholder-transparent::placeholder {
@@ -72639,6 +73177,22 @@ video {
     padding: 1px;
   }
 
+  .xl\:p-third {
+    padding: 33.3%;
+  }
+
+  .xl\:p-half {
+    padding: 50%;
+  }
+
+  .xl\:p-full {
+    padding: 100%;
+  }
+
+  .xl\:p-3\/4 {
+    padding: 75%;
+  }
+
   .xl\:py-0 {
     padding-top: 0;
     padding-bottom: 0;
@@ -72827,6 +73381,46 @@ video {
   .xl\:px-px {
     padding-left: 1px;
     padding-right: 1px;
+  }
+
+  .xl\:py-third {
+    padding-top: 33.3%;
+    padding-bottom: 33.3%;
+  }
+
+  .xl\:px-third {
+    padding-left: 33.3%;
+    padding-right: 33.3%;
+  }
+
+  .xl\:py-half {
+    padding-top: 50%;
+    padding-bottom: 50%;
+  }
+
+  .xl\:px-half {
+    padding-left: 50%;
+    padding-right: 50%;
+  }
+
+  .xl\:py-full {
+    padding-top: 100%;
+    padding-bottom: 100%;
+  }
+
+  .xl\:px-full {
+    padding-left: 100%;
+    padding-right: 100%;
+  }
+
+  .xl\:py-3\/4 {
+    padding-top: 75%;
+    padding-bottom: 75%;
+  }
+
+  .xl\:px-3\/4 {
+    padding-left: 75%;
+    padding-right: 75%;
   }
 
   .xl\:pt-0 {
@@ -73131,6 +73725,70 @@ video {
 
   .xl\:pl-px {
     padding-left: 1px;
+  }
+
+  .xl\:pt-third {
+    padding-top: 33.3%;
+  }
+
+  .xl\:pr-third {
+    padding-right: 33.3%;
+  }
+
+  .xl\:pb-third {
+    padding-bottom: 33.3%;
+  }
+
+  .xl\:pl-third {
+    padding-left: 33.3%;
+  }
+
+  .xl\:pt-half {
+    padding-top: 50%;
+  }
+
+  .xl\:pr-half {
+    padding-right: 50%;
+  }
+
+  .xl\:pb-half {
+    padding-bottom: 50%;
+  }
+
+  .xl\:pl-half {
+    padding-left: 50%;
+  }
+
+  .xl\:pt-full {
+    padding-top: 100%;
+  }
+
+  .xl\:pr-full {
+    padding-right: 100%;
+  }
+
+  .xl\:pb-full {
+    padding-bottom: 100%;
+  }
+
+  .xl\:pl-full {
+    padding-left: 100%;
+  }
+
+  .xl\:pt-3\/4 {
+    padding-top: 75%;
+  }
+
+  .xl\:pr-3\/4 {
+    padding-right: 75%;
+  }
+
+  .xl\:pb-3\/4 {
+    padding-bottom: 75%;
+  }
+
+  .xl\:pl-3\/4 {
+    padding-left: 75%;
   }
 
   .xl\:placeholder-transparent::placeholder {

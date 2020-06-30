@@ -21,17 +21,31 @@ async function initContract() {
   // Initializing our contract APIs by contract name and configuration.
   window.account = await new nearlib.Account(window.near.connection, window.accountId);
   window.contract = await new nearlib.Contract(window.account, window.nearConfig.contractName, {
-    // View methods are read only. They don't modify the state, but usually return some value.
     viewMethods: ['welcome'],
-    // Change methods can modify the state. But you don't receive the returned value when called.
     changeMethods: ['setGreeting'],
-    // Sender is the account ID to initialize transactions.
+    sender: window.accountId
+  });
+  window.contractParas = await new nearlib.Contract(window.account, 'contract-alpha.paras.testnet', {
+    viewMethods: [
+      'getUserById',
+    ],
+    changeMethods: [
+      'createMemento',
+      'updateMemento',
+      'deleteMemento',
+      'createPost',
+      'editPost',
+      'deletePost',
+      'redactPost',
+      'createUser',
+      'updateUser',
+    ],
     sender: window.accountId
   });
 }
 
 window.nearInitPromise = initContract().then(() => {
-  ReactDOM.render(<App contract={window.contract} wallet={window.walletAccount} account={window.account} />,
+  ReactDOM.render(<App contract={window.contract} contractParas={window.contractParas} wallet={window.walletAccount} account={window.account} />,
     document.getElementById('root')
   );
 }).catch(console.error)
