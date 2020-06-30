@@ -13,7 +13,7 @@
     "start": "npm run watch:css && env-cmd -f ./neardev/dev-account.env parcel src/index.html",
     "dev": "nodemon --watch assembly -e ts --exec \"npm run start\"",
     "test": "asp && npm run build:contract && jest test --runInBand",
-    "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css", 
+    "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
     "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
   },
   "devDependencies": {
@@ -40,6 +40,7 @@
     "postcss-cli": "^7.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.5"
   },
   "eslintConfig": {
