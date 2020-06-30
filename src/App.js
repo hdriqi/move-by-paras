@@ -90,7 +90,7 @@ const App = ({ contract, contractParas, wallet, account }) => {
     init()
   }, [])
 
-  const value = { contract, wallet, account }
+  const value = { contract, contractParas, wallet, account }
 
   if (loading) {
     return (

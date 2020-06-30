@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import * as faceapi from 'face-api.js'
 import { createCanvas, loadImage } from 'canvas'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useParams, withRouter } from 'react-router-dom'
 import NavTop from '../components/NavTop'
 import Pop from '../components/Pop'
 import { RotateSpinLoader } from 'react-css-loaders'
@@ -11,7 +11,7 @@ import { compressImg } from '../utils/common'
 import { useNear } from '../App'
 import ipfs from '../utils/ipfs'
 
-const NewPost = () => {
+const NewPost = ({ history }) => {
   const params = useParams()
   const near = useNear()
   const [imageUrl, setImageUrl] = useState(null)
@@ -44,15 +44,18 @@ const NewPost = () => {
         }
         contentList.push(content)
       }
-      contentList.push({
-        type: 'text',
-        body: caption
-      })
+      if (caption.length > 0) {
+        contentList.push({
+          type: 'text',
+          body: caption
+        })
+      }
       const newData = {
         contentList: contentList,
         mementoId: params.mementoId,
       }
-      await near.contract.createPost(newData)
+      await near.contractParas.createPost(newData)
+      history.push('/')
     } catch (err) {
       console.log(err)
     }
@@ -206,11 +209,11 @@ const NewPost = () => {
           </div>
         </div>
         <div className="mt-2">
-          <textarea placeholder="Write a caption..." className="w-full rounded-md p-2 outline-none bg-dark-2 focus:bg-dark-16 text-white" value={caption} onChange={updateCaption} />
+          <textarea placeholder="Your demand" className="w-full rounded-md p-2 outline-none bg-dark-2 focus:bg-dark-16 text-white" value={caption} onChange={updateCaption} />
         </div>
       </div>
     </div >
   )
 }
 
-export default NewPost
+export default withRouter(NewPost)
