@@ -76,7 +76,7 @@ const PostCard = ({ post = {} }) => {
                 </Link>
                 {
                   post.contentList[1] && (
-                    <p className="text-white-1 inline"> demands <em>{post.contentList[1]?.body}</em></p>
+                    <p className="text-white-1 inline"> demands <em>{post.contentList[1].body}</em></p>
                   )
                 }
               </div>
