@@ -1,15 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Image from './Image'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import List from './List'
+import { useNear } from '../App'
 
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
 const PostCard = ({ post = {} }) => {
+  const near = useNear()
+  const [showModal, setShowModal] = useState(false)
+  const [isDeleted, setIsDeleted] = useState(false)
+
+  const _deletePost = async () => {
+    const conf = confirm('Delete this post?')
+    if (conf) {
+      near.setIsSubmitting(true)
+      await near.contractParas.deletePost({
+        id: post.id
+      })
+      setIsDeleted(true)
+      near.setIsSubmitting(false)
+    }
+  }
+
+  if (isDeleted) {
+    return null
+  }
+
   return (
     <div>
+      <List show={showModal} onClose={_ => setShowModal(false)}>
+        <div className="p-2">
+          <p className="text-white" onClick={_deletePost}>Delete</p>
+        </div>
+      </List>
       <div className="rounded-md overflow-hidden bg-dark-6">
         {
           post.mementoId.length > 0 && post.memento && (

@@ -16655,6 +16655,18 @@ a {
   cursor: pointer;
 }
 
+.rotate-z { /* Safari 4+ */ /* Fx 5+ */ /* Opera 12+ */
+  animation:         rotate-z 2s infinite ease-in-out; /* IE 10+, Fx 29+ */
+}
+
+@keyframes rotate-z {
+  0%   { transform: rotate3d(0,1,0,0deg);
+  }
+
+  100% { transform: rotate3d(0,1,0,360deg);
+  }
+}
+
 /* Chrome, Safari, Edge, Opera */
 
 input::-webkit-outer-spin-button,
