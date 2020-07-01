@@ -14,6 +14,8 @@ const PostCard = ({ post = {} }) => {
   const [showModal, setShowModal] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
 
+  const imgUrl = `https://ipfs-gateway.paras.id/ipfs/${JSON.parse(post.contentList[0].body).url}`
+
   const _deletePost = async () => {
     const conf = confirm('Delete this post?')
     if (conf) {
@@ -34,7 +36,10 @@ const PostCard = ({ post = {} }) => {
     <div>
       <List show={showModal} onClose={_ => setShowModal(false)}>
         <div className="p-2">
-          <p className="text-white" onClick={_deletePost}>Delete</p>
+          <a className="text-white" href={imgUrl} download>Download Image</a>
+        </div>
+        <div className="p-2">
+          <a className="text-white" onClick={_deletePost}>Delete</a>
         </div>
       </List>
       <div className="rounded-md overflow-hidden bg-dark-6">
