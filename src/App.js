@@ -13,7 +13,7 @@ import Movement from './pages/Movement'
 import Profile from './pages/Profile'
 import { RotateSpinLoader } from 'react-css-loaders'
 
-const MODEL_URL = `http://127.0.0.1:8080/models`
+const MODEL_URL = `/models`
 
 const DEFAULT_AVATAR = [
   {
