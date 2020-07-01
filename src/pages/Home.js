@@ -14,7 +14,7 @@ const Home = () => {
     getData()
   }, [])
   return (
-    <div>
+    <div className="pb-24">
       <NavTop
         center={
           <h3 className="text-lg font-bold text-white">MOVE by Paras</h3>
@@ -29,7 +29,10 @@ const Home = () => {
           )
         })
       }
-      <div className="fixed bottom-0 left-0 right-0 pb-4">
+      <div className="fixed bottom-0 pb-4" style={{
+        left: `50%`,
+        transform: `translateX(-50%)`
+      }}>
         <div className="m-auto w-16">
           <Link className="inline-block" to="/new/post">
             <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
