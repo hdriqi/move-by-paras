@@ -57,6 +57,7 @@ const Login = ({ history }) => {
         <p className="text-white mt-4">Share & show support for the MOVEMENT that you believe in!</p>
         <p className="text-white mt-4">Here's how MOVE protect your privacy:</p>
         <p className="text-white-1"><span className="text-primary-5">✔</span> Pseudonymous</p>
+        <p className="text-white-1"><span className="text-primary-5">✔</span> Everything happens on client-side</p>
         <p className="text-white-1"><span className="text-primary-5">✔</span> Machine Learning to Pixelated Face</p>
         <p className="text-white-1"><span className="text-primary-5">✔</span> Auto-strip Image Metadata</p>
         <p className="text-white-1"><span className="text-primary-5">✔</span> Decentralized (IPFS + NEARprotocol)</p>
