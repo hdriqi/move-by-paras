@@ -55,8 +55,8 @@ const NewPostMementoList = () => {
               <div className="w-1/2 p-4">
                 <Link to={`/new/post/${memento.id}`}>
                   <div>
-                    <Image className="w-56 h-56 object-contain" data={memento.img} />
-                    <h4 className="mt-2 text-white font-bold truncate overflow-hidden">{memento.id}</h4>
+                    <Image className="w-56 h-56 object-contain m-auto" data={memento.img} />
+                    <h4 className="mt-2 text-white text-center font-bold truncate overflow-hidden">{memento.id}</h4>
                   </div>
                 </Link>
               </div>
