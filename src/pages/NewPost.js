@@ -62,7 +62,7 @@ const NewPost = ({ history }) => {
     setIsSubmitting(false)
   }
 
-  const updateImg = (e) => {
+  const updateImg = async (e) => {
     var reader = new FileReader()
     setLoadingImg('Detecting Faces...')
     reader.onload = () => {
@@ -102,8 +102,8 @@ const NewPost = ({ history }) => {
 
           // We'll be pixelating the image by threshold
           const percent = 0.15
-          const scaledWidth = imgEl.width * percent
-          const scaledHeight = imgEl.height * percent
+          const scaledWidth = Math.min(imgEl.width * percent, 200)
+          const scaledHeight = Math.min(imgEl.width * percent, 200)
           // Render image smaller
           hiddenCtx.drawImage(newImage, 0, 0, scaledWidth, scaledHeight)
           // Stretch the smaller image onto larger context
@@ -113,6 +113,7 @@ const NewPost = ({ history }) => {
           outputCtx.clearRect(0, 0, imgEl.width, imgEl.height)
           outputCtx.drawImage(newImage, 0, 0)
           // Draw pixelated faces to canvas
+          console.log(faces)
           faces.forEach(face =>
             outputCtx.putImageData(
               hiddenCtx.getImageData(
@@ -134,7 +135,8 @@ const NewPost = ({ history }) => {
         })
       }
     }
-    reader.readAsDataURL(e.target.files[0])
+    const img = await compressImg(e.target.files[0])
+    reader.readAsDataURL(img)
   }
 
   const updateCaption = (e) => {
