@@ -3,16 +3,28 @@ import axios from 'axios'
 import PostCard from '../components/PostCard'
 import { Link } from 'react-router-dom'
 import NavTop from '../components/NavTop'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import InfiniteLoader from '../components/InfiniteLoader'
 
 const Home = () => {
   const [postList, setPostList] = useState([])
-  useEffect(() => {
-    const getData = async () => {
-      const response = await axios.get('https://api-dev.paras.id/posts?mementoId__re=.act&__sort=-createdAt')
-      setPostList(response.data.data)
+  const [hasMore, setHasMore] = useState(true)
+  const [pageCount, setPageCount] = useState(0)
+
+  const getPost = async () => {
+    const ITEM_LIMIT = 10
+    const response = await axios.get(`https://api-dev.paras.id/posts?mementoId__re=.act&__sort=-createdAt&__limit=${ITEM_LIMIT}&__skip=${pageCount * ITEM_LIMIT}`)
+    if (response.data.data.length < ITEM_LIMIT) {
+      setHasMore(false)
     }
-    getData()
+    setPageCount(pageCount + 1)
+    const newPostList = postList.slice().concat(response.data.data)
+    setPostList(newPostList)
+  }
+  useEffect(() => {
+    getPost()
   }, [])
+
   return (
     <div className="pb-24">
       <NavTop
@@ -20,15 +32,22 @@ const Home = () => {
           <h3 className="text-lg font-bold text-white">MOVE by Paras</h3>
         }
       />
-      {
-        postList.map(post => {
-          return (
-            <div className="mt-6">
-              <PostCard post={post} />
-            </div>
-          )
-        })
-      }
+      <InfiniteScroll
+        dataLength={postList.length}
+        next={getPost}
+        hasMore={hasMore}
+        loader={<InfiniteLoader key={0} />}
+      >
+        {
+          postList.map(post => {
+            return (
+              <div className="mt-6">
+                <PostCard post={post} />
+              </div>
+            )
+          })
+        }
+      </InfiniteScroll>
       <div className="fixed bottom-0 pb-4" style={{
         left: `50%`,
         transform: `translateX(-50%)`
