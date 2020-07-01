@@ -20,11 +20,6 @@ async function initContract() {
 
   // Initializing our contract APIs by contract name and configuration.
   window.account = await new nearlib.Account(window.near.connection, window.accountId);
-  window.contract = await new nearlib.Contract(window.account, window.nearConfig.contractName, {
-    viewMethods: ['welcome'],
-    changeMethods: ['setGreeting'],
-    sender: window.accountId
-  });
   window.contractParas = await new nearlib.Contract(window.account, 'contract-alpha.paras.testnet', {
     viewMethods: [
       'getUserById',
@@ -46,7 +41,7 @@ async function initContract() {
 }
 
 window.nearInitPromise = initContract().then(() => {
-  ReactDOM.render(<App contract={window.contract} contractParas={window.contractParas} wallet={window.walletAccount} account={window.account} />,
+  ReactDOM.render(<App contractParas={window.contractParas} wallet={window.walletAccount} account={window.account} />,
     document.getElementById('root')
   );
 }).catch(console.error)
