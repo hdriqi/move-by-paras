@@ -8,7 +8,7 @@ const Home = () => {
   const [postList, setPostList] = useState([])
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get('https://api-dev.paras.id/posts?mementoId__re=.act')
+      const response = await axios.get('https://api-dev.paras.id/posts?mementoId__re=.act&__sort=-createdAt')
       setPostList(response.data.data)
     }
     getData()
