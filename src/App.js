@@ -63,12 +63,12 @@ export const useNear = () => useContext(AppContext)
 const App = ({ contract, contractParas, wallet, account }) => {
   const [loading, setLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [me, setMe] = useState(null)
 
   useEffect(() => {
     const init = async () => {
       await ipfs.init()
       await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
-      setLoading(false)
 
       if (wallet.isSignedIn()) {
         let profile = await contractParas.getUserById({
@@ -77,7 +77,7 @@ const App = ({ contract, contractParas, wallet, account }) => {
         if (!profile) {
           const avatar = DEFAULT_AVATAR[Math.floor(Math.random() * DEFAULT_AVATAR.length)]
           try {
-            profile = await near.contract.createUser({
+            profile = await contractParas.createUser({
               imgAvatar: avatar,
               bio: ''
             })
@@ -85,16 +85,17 @@ const App = ({ contract, contractParas, wallet, account }) => {
             console.log(err)
           }
         }
-        console.log(profile)
+        setMe(profile)
       }
       else {
         console.log('not logged in ')
       }
+      setLoading(false)
     }
     init()
   }, [])
 
-  const value = { contract, contractParas, wallet, account, setIsSubmitting }
+  const value = { contract, contractParas, wallet, account, setIsSubmitting, me }
 
   if (loading) {
     return (
@@ -127,11 +128,11 @@ const App = ({ contract, contractParas, wallet, account }) => {
             <Route path="/" exact>
               <Home />
             </Route>
+            <Route path="/login" exact>
+              <Login />
+            </Route>
             <Route path="/m/:mementoId" exact>
               <Movement />
-            </Route>
-            <Route path="/:userId" exact>
-              <Profile />
             </Route>
             <Route path="/new/post" exact>
               <NewPostMementoList />
@@ -142,8 +143,8 @@ const App = ({ contract, contractParas, wallet, account }) => {
             <Route path="/new/post/:mementoId">
               <NewPost />
             </Route>
-            <Route path="/login" exact>
-              <Login />
+            <Route path="/:userId" exact>
+              <Profile />
             </Route>
           </Switch>
         </Router>
