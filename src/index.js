@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import getConfig from './config.js';
 import * as nearlib from 'near-api-js';
+
+const CONTRACT_NAME = 'contract-alpha.paras.testnet'
 
 // Initializing contract
 async function initContract() {
-  window.nearConfig = getConfig(process.env.NODE_ENV || 'development')
-  console.log("nearConfig", window.nearConfig);
+  window.nearConfig = {
+    networkId: 'default',
+    nodeUrl: 'https://rpc.testnet.near.org',
+    contractName: CONTRACT_NAME,
+    walletUrl: 'https://wallet.testnet.near.org',
+    helperUrl: 'https://helper.testnet.near.org',
+  };
 
   // Initializing connection to the NEAR DevNet.
   window.near = await nearlib.connect(Object.assign({ deps: { keyStore: new nearlib.keyStores.BrowserLocalStorageKeyStore() } }, window.nearConfig));
@@ -20,7 +26,7 @@ async function initContract() {
 
   // Initializing our contract APIs by contract name and configuration.
   window.account = await new nearlib.Account(window.near.connection, window.accountId);
-  window.contractParas = await new nearlib.Contract(window.account, 'contract-alpha.paras.testnet', {
+  window.contractParas = await new nearlib.Contract(window.account, window.nearConfig.contractName, {
     viewMethods: [
       'getUserById',
       'getMementoById'
