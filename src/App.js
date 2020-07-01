@@ -8,6 +8,7 @@ import NewPost from './pages/NewPost'
 import Login from './pages/Login'
 import NewPostMementoList from './pages/NewPostMementoList'
 import ipfs from './utils/ipfs'
+import NewMovement from './pages/NewMovement'
 
 const MODEL_URL = `http://127.0.0.1:8080/models`
 
@@ -110,6 +111,9 @@ const App = ({ contract, contractParas, wallet, account }) => {
             </Route>
             <Route path="/new/post" exact>
               <NewPostMementoList />
+            </Route>
+            <Route path="/new/movement" exact>
+              <NewMovement />
             </Route>
             <Route path="/new/post/:mementoId">
               <NewPost />

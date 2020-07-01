@@ -28,6 +28,7 @@ async function initContract() {
   window.contractParas = await new nearlib.Contract(window.account, 'contract-alpha.paras.testnet', {
     viewMethods: [
       'getUserById',
+      'getMementoById'
     ],
     changeMethods: [
       'createMemento',
