@@ -47,12 +47,12 @@ const PostCard = ({ post = {} }) => {
           post.mementoId.length > 0 && post.memento && (
             <div className="bg-dark-2 text-center p-2 flex justify-center">
               <Link to={`/m/${post.mementoId}`}>
-                <a className="flex items-center">
+                <div className="flex items-center">
                   <div className="w-4 h-4 rounded-sm overflow-hidden">
                     <Image className="w-full h-full object-fill" data={post.memento.img} />
                   </div>
                   <h4 className="ml-2 font-bold text-white text-sm">{post.mementoId}</h4>
-                </a>
+                </div>
               </Link>
             </div>
           )
@@ -64,9 +64,9 @@ const PostCard = ({ post = {} }) => {
           <div className="flex">
             <div className="h-8 w-8 rounded-full overflow-hidden shadow-inner flex-shrink-0">
               <Link to={`/${post.owner}`}>
-                <a>
+                <div>
                   <Image className="object-fill" data={post.user.imgAvatar} />
-                </a>
+                </div>
               </Link>
             </div>
             <div className="ml-2 mt-1">

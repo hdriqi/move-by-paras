@@ -52,7 +52,7 @@ const NewPostMementoList = () => {
         {
           mementoList.map(memento => {
             return (
-              <div className="w-1/2 p-4">
+              <div key={memento.id} className="w-1/2 p-4">
                 <Link to={`/new/post/${memento.id}`}>
                   <div>
                     <Image className="w-56 h-56 object-contain m-auto" data={memento.img} />
