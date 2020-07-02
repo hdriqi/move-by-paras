@@ -38,9 +38,13 @@ const PostCard = ({ post = {} }) => {
         <div className="p-2">
           <a className="text-white" href={imgUrl} download>Download Image</a>
         </div>
-        <div className="p-2">
-          <a className="text-white" onClick={_deletePost}>Delete</a>
-        </div>
+        {
+          near.me && near.me.id == post.owner && (
+            <div className="p-2">
+              <a className="text-white" onClick={_deletePost}>Delete</a>
+            </div>
+          )
+        }
       </List>
       <div className="rounded-md overflow-hidden bg-dark-6">
         {
